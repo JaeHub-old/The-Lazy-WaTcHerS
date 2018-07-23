@@ -59,7 +59,7 @@ var mainState = {
         
         this.player = game.add.sprite(0, 400,'player');
         //sets the player's anchor to the center
-//        this.player.anchor.setTo(0.5, 0.5);
+        this.player.anchor.setTo(0.5, 0.5);
         this.player.scale.setTo(2);
         this.player.frame = 24;
         this.playerOldPos = 0;
@@ -81,7 +81,7 @@ var mainState = {
         
     game.physics.arcade.collide(this.player, this.wallsLayer); 
     
-    if(!(this.cursors.left.isDown || this.cursors.right.isDown || this.cursors.up.isDown || this.cursors.down.isDown)){
+    if(!(this.cursors.left.isDown || this.cursors.right.isDown || this.cursors.up.isDown)){
         this.player.body.velocity.x = 0;
         this.player.body.velocity.y = 0;
         this.player.animations.stop();
