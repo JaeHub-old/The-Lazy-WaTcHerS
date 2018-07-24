@@ -7,9 +7,10 @@ var mainState = {
         game.load.image('mountains-mid2','assets/mountains-mid2.png');
         game.load.tilemap('map_01', 'assets/Chris Test Map.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.image('mapTiles', 'assets/Platform_tilesets.png');
+        game.load.image('Birb', 'assets/birb.png');
     },
     
-    create: function() {
+    create: function(game) {
         
         //The Test's Background Color
         game.stage.backgroundColor = '#697e96';
@@ -74,8 +75,11 @@ var mainState = {
 
         this.walls = game.add.group();
         
+        new EnemyBird(0, game, player.x+400, player.y-200);
+        
 
     },
+    
     
     update: function() {
         
@@ -117,6 +121,19 @@ var mainState = {
         
     }  
        
+    },
+    
+    EnemyBird: function(index, game, x, y){
+        this.bird = game.add.sprite(x, y, 'birb');
+        this.bird.anchor.setTo(0.5, 0.5);
+        this.bird.name = index.toString();
+        game.physics.enable(this.bird, Phaser.Physics.ARCADE);
+        this.bird.body.immovable = true;
+        this.bird.body.collideWorldBounds = true;
+        
+        this.birdTween = game.add.tween(this.bird) .to({
+            y: this.bird.y + 25
+        },2000, 'Linear', true, 0, 100, true);
     }
 }
     
