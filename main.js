@@ -52,7 +52,7 @@ var mainState = {
         //Adds Player Sprite and Things
         this.player = game.add.sprite(0,400,'spirit-player');
         this.player.anchor.setTo(0.5, 0.5);
-        this.player.scale.setTo(20);
+        this.player.scale.setTo(2);
         this.playerOldPos = 0;
         
         //Adds Animations To the Character
