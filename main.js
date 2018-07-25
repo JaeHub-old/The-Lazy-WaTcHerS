@@ -1,4 +1,18 @@
-
+RedDemon = function(index, game, x, y){
+    
+    this.demon = game.add.sprite(x, y, 'redDemon');
+    this.demon.frame = 0; 
+    this.demon.anchor.setTo(0.5, 0.5);
+    this.demon.name = index.toString();
+    game.physics.enable(this.demon, Phaser.Physics.ARCADE);
+    this.demon.body.immovable = true; 
+    this.demon.body.collideWorldBounds = true;
+    
+    this.demonTween = game.add.tween(this.demon).to({
+        y: this.demon.y + 25
+    }, 2000, 'Linear', true, 0, 100, true);
+    
+}
 
 Game.main = function(game){};
 
@@ -9,7 +23,7 @@ var jumpTimer = 0;
 
 Game.main.prototype = {
     
-    create: function() {
+    create: function(game) {
         
         //Background Image
         this.backgroundImage = this.add.tileSprite(0, 0, 1000, 550, 'background');
@@ -91,7 +105,11 @@ Game.main.prototype = {
         //Adds a group to the Walls
         this.walls = this.add.group();
         
+        new RedDemon(0, game, this.player.x + 400, this.player.y -200);
+        
     },
+    
+    
     
         update: function() {
         
@@ -101,9 +119,9 @@ Game.main.prototype = {
             
         if(controls.right.isDown){
             if(this.playerOldPos != this.player.body.x){
-                this.spikesFront -= 0.5;
-                this.spikesMid -= 0.9;
-                this.spikesTop -= 1.2;
+                this.spikesFront.tilePosition.x -= 0.5;
+                this.spikesMid.tilePosition.x -= 0.9;
+                this.spikesTop.tilePosition.x -= 1.2;
             }
             this.player.animations.play('right');
             this.player.scale.setTo(0.7,0.7);
@@ -112,9 +130,9 @@ Game.main.prototype = {
         
         if(controls.left.isDown){
             if(this.playerOldPos != this.player.body.x){
-                this.spikesFront += 0.5;
-                this.spikesMid += 0.9;
-                this.spikesTop += 1.2;
+                this.spikesFront.tilePosition.x += 0.5;
+                this.spikesMid.tilePosition.x += 0.9;
+                this.spikesTop.tilePosition.x += 1.2;
             }
             this.player.animations.play('right');
             this.player.scale.setTo(-0.7,0.7);
