@@ -5,21 +5,25 @@ Game.Boot = function(game){
 };
 
 Game.Boot.prototype = {
-    init:function(){
+    init: function(){
         
         this.input.maxPointers = 1;
         
         this.stage.disableVisibilityChange = true;
-    },   
+    },
     
     preload: function(){
         
-        this.load.image('preloaderBar', 'media/');
+        //Preloads Things for the Loading Screen
+        this.load.image('Team-logo', 'media/lazywatcherslogo.png');
     },
     
     create: function(){
         
         //Goes to the Preload Bar
         this.state.start('Preloader');
-    }
+    },
+    
+    
 }
+
