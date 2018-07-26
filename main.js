@@ -7,12 +7,15 @@ RedDemon = function(index, game, x, y){
     game.physics.enable(this.demon, Phaser.Physics.ARCADE);
     this.demon.body.immovable = true; 
     this.demon.body.collideWorldBounds = true;
+    this.demon.body.allowGravity = false;
     
     this.demonTween = game.add.tween(this.demon).to({
         y: this.demon.y + 25
     }, 2000, 'Linear', true, 0, 100, true);
-    
+    this.enemy1 = this.demon;
 }
+
+var enemy1;
 
 Game.main = function(game){};
 
@@ -30,28 +33,28 @@ Game.main.prototype = {
         this.backgroundImage.fixedToCamera = true; 
         
         //Spikes on the Top
-        this.spikesTop = this.add.tileSprite(0, 
-            this.height - this.cache.getImage('spikes-top').height,
-            this.width,
-            this.cache.getImage('spikes-top').height,
+        this.spikesTop = game.add.tileSprite(0, 
+            game.height - game.cache.getImage('spikes-top').height,
+            game.width,
+            game.cache.getImage('spikes-top').height,
             'spikes-top'
         ); 
         this.spikesTop.fixedToCamera = true; 
         
         //Spikes in the Middle
-        this.spikesMid = this.add.tileSprite(0, 
-            this.height - this.cache.getImage('spikes-mid').height,
-            this.width,
-            this.cache.getImage('spikes-mid').height,
+        this.spikesMid = game.add.tileSprite(0, 
+            game.height - game.cache.getImage('spikes-mid').height,
+            game.width,
+            game.cache.getImage('spikes-mid').height,
             'spikes-mid'
         );
         this.spikesMid.fixedToCamera = true; 
         
         //Spikes in the Front
-        this.spikesFront = this.add.tileSprite(0,
-            this.height - this.cache.getImage('spikes-front').height,
-            this.width,
-            this.cache.getImage('spikes-front').height,
+        this.spikesFront = game.add.tileSprite(0,
+            game.height - game.cache.getImage('spikes-front').height,
+            game.width,
+            game.cache.getImage('spikes-front').height,
             'spikes-front'
         );
         this.spikesFront.fixedToCamera = true;
@@ -104,14 +107,18 @@ Game.main.prototype = {
         
         //Adds a group to the Walls
         this.walls = this.add.group();
+//        this.enemy1 = game.add.group();
         
-        new RedDemon(0, game, this.player.x + 400, this.player.y -200);
+        RedDemon.bind(this)(0, game, this.player.x + 400, this.player.y -200);
+        
+        this.map = this.game.add.tilemap('level_1');
+        this.map.setTileIndexCallback([15, 16, 17, 18, 19, 20, 21], die, this.game);
         
     },
     
     
     
-        update: function() {
+    update: function(game) {
         
         this.physics.arcade.collide(this.player, this.wallsLayer);
             
@@ -148,11 +155,35 @@ Game.main.prototype = {
         
             this.player.animations.play('jump');
         }
-            
+        
+        //Plays Idle Animation
         if(this.player.body.velocity.x === 0 && this.player.body.velocity.y === 0){
             this.player.animations.play('idle');
         }
         
-    }
+        //Checks if Player Runs Into Enemy
+        game.physics.arcade.overlap(this.player, this.enemy1, this.restart, null, this);
+        },
+        
+    
+    restart : function (game) {
+        game.game.state.start('main');
+    },
+    
+
     
 }
+
+function die(sprite, tile, game){
+    console.log('hi', game);
+    game.game.state.start('main');
+}
+
+//function checkOverlap(spriteA, spriteB){
+//        
+//        var boundsA = spriteA.getBounds();
+//        var boundsB = spriteB.getBounds();
+//        
+//        return Phaser.Rectangle.intersects(boundsA, boundsB);
+//    }
+
